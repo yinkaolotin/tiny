@@ -1,0 +1,8 @@
+replicaCount: 4
+
+env:
+  SERVICE_ENV: prod
+
+resources:
+  limits:
+    memory: 512Mi
