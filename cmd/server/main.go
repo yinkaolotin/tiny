@@ -8,9 +8,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/yinkaolotin/tiny/internal/config"
 	"github.com/yinkaolotin/tiny/internal/httpapi"
 	"github.com/yinkaolotin/tiny/internal/logger"
+	"github.com/yinkaolotin/tiny/internal/metrics"
 	"github.com/yinkaolotin/tiny/internal/storage"
 	"github.com/yinkaolotin/tiny/internal/worker"
 )
@@ -21,15 +23,19 @@ func main() {
 
 	store := storage.NewMemoryStore()
 	handler := httpapi.New(store, log)
+	metrics.Register()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", handler.Health)
 	mux.HandleFunc("/ready", handler.Ready)
 	mux.HandleFunc("/items", handler.Items)
+	mux.Handle("/metrics", promhttp.Handler())
+
+	root := httpapi.MetricsMiddleware(mux)
 
 	server := &http.Server{
 		Addr:    ":" + cfg.HTTPPort,
-		Handler: mux,
+		Handler: root,
 	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
