@@ -1,8 +1,8 @@
 replicaCount: 2
 
 image:
-  repository: tiny
-  tag: local
+  repository: yimikao/tiny
+  tag: 0.1.1
   pullPolicy: IfNotPresent
 
 service:
