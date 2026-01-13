@@ -6,6 +6,7 @@ spec:
   selector:
     {{- include "tiny.labels" . | nindent 4 }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: {{ .Values.service.name }}
+      port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
 
