@@ -8,7 +8,7 @@ import (
 	"github.com/yinkaolotin/tiny/internal/storage"
 )
 
-func StartCleanup(ctx context.Context, store *storage.MemoryStore, log zerolog.Logger) {
+func StartCleanup(ctx context.Context, store storage.Store, log zerolog.Logger) {
 	ticker := time.NewTicker(30 * time.Second)
 
 	go func() {

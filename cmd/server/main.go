@@ -21,7 +21,10 @@ func main() {
 	cfg := config.Load()
 	log := logger.New(cfg.LogLevel)
 
-	store := storage.NewMemoryStore()
+	store, err := storage.NewFileStore(cfg.DataDir)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to init filestore")
+	}
 	handler := httpapi.New(store, log)
 	metrics.Register()
 

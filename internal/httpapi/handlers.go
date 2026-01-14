@@ -10,11 +10,11 @@ import (
 )
 
 type Handler struct {
-	store *storage.MemoryStore
+	store storage.Store
 	log   zerolog.Logger
 }
 
-func New(store *storage.MemoryStore, log zerolog.Logger) *Handler {
+func New(store storage.Store, log zerolog.Logger) *Handler {
 	return &Handler{store: store, log: log}
 }
 
