@@ -23,4 +23,5 @@ env:
   SERVICE_ENV: dev
   HTTP_PORT: "8080"
   LOG_LEVEL: info
+  DATA_DIR: /data
 

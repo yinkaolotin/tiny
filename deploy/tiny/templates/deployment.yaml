@@ -22,6 +22,10 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
 
+          volumesMounts:
+            - name: data
+              mountPath: /data
+
           env:
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
@@ -44,3 +48,8 @@ spec:
 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "tiny.name" . }}-data

@@ -10,6 +10,7 @@ type Config struct {
 	Env         string
 	HTTPPort    string
 	LogLevel    string
+	DataDir     string
 }
 
 /*
@@ -24,6 +25,7 @@ func Load() Config {
 		Env:         getEnv("SERVICE_ENV", "dev"),
 		HTTPPort:    getEnv("HTTP_PORT", "8080"),
 		LogLevel:    getEnv("LOG_LEVEL", "info"),
+		DataDir:     getEnv("DATA_DIR", "/data"),
 	}
 
 	log.Printf("config loaded: %+v", cfg)
