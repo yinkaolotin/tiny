@@ -22,7 +22,7 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
 
-          volumesMounts:
+          volumeMounts:
             - name: data
               mountPath: /data
 
