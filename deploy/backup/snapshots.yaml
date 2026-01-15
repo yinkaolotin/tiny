@@ -1,0 +1,17 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: ceph-snapclass
+driver: rook-ceph.rbd.csi.ceph.com
+deletionPolicy: Delete
+---
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: tiny-snapshot
+  namespace: tiny
+spec:
+  volumeSnapshotClassName: ceph-snapclass
+  source:
+    persistentVolumeClaimName: tiny-data
+

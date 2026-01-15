@@ -1,0 +1,10 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: tiny-backup
+  namespace: velero
+spec:
+  includedNamespaces:
+    - tiny
+  snapshotVolumes: true
+  storageLocation: default
