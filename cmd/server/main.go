@@ -21,10 +21,33 @@ func main() {
 	cfg := config.Load()
 	log := logger.New(cfg.LogLevel)
 
-	store, err := storage.NewFileStore(cfg.DataDir)
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to init filestore")
+	if len(os.Args) > 1 && os.Args[1] == "migrate" {
+		if err := storage.RunMigrations(cfg); err != nil {
+			log.Fatal().Err(err).Msg("migration failed")
+		}
+		log.Info().Msg("migration completed")
+		return
 	}
+
+	var store storage.Store
+
+	switch cfg.StorageBackend {
+	case "postgres":
+		store, err = storage.NewPostgresStore(cfg.DatabaseURL())
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to init postgres store")
+		}
+	case "file":
+		store, err = storage.NewFileStore(cfg.DataDir)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to init filestore")
+		}
+	case "memory":
+		store = storage.NewMemoryStore()
+	default:
+		log.Fatal().Str("storage_backend", cfg.StorageBackend).Msg("unknown storage backend")
+	}
+
 	handler := httpapi.New(store, log)
 	metrics.Register()
 
