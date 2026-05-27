@@ -22,7 +22,7 @@ func main() {
 	log := logger.New(cfg.LogLevel)
 
 	if len(os.Args) > 1 && os.Args[1] == "migrate" {
-		if err := storage.RunMigrations(cfg); err != nil {
+		if err := storage.RunMigrations(cfg.DatabaseURL()); err != nil {
 			log.Fatal().Err(err).Msg("migration failed")
 		}
 		log.Info().Msg("migration completed")
@@ -30,6 +30,7 @@ func main() {
 	}
 
 	var store storage.Store
+	var err error
 
 	switch cfg.StorageBackend {
 	case "postgres":
